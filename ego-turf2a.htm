@@ -1,0 +1,78 @@
+<html>
+<head>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+ <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+    <script src="https://npmcdn.com/@turf/turf@6.3.0/turf.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
+    crossorigin="anonymous"></script>
+   <style>
+#map {
+  height: 500px;
+}
+   </style>
+
+</head>
+<body>
+<div id="map"></div>
+</body>
+   <script>
+var map = L.map("map").setView([51.99467372761601, -1.5806396533365619], 16);
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+//drawGrid();
+
+  //map.whenReady(drawGrid);
+  map.on('move', redrawLayer);
+
+function drawGrid(){
+	if (map.getZoom() > 15){
+		// GRID
+		var bbox = map.getBounds().toBBoxString().split(',').map(Number);
+		var cellSide = 0.01;
+		//var mask = polyLayer.toGeoJSON().features[0];
+		var options = {
+			units: 'kilometers',
+			//mask: mask
+		};
+
+		var squareGrid = turf.squareGrid(bbox, cellSide, options);
+var pins = [];
+turf.featureEach(squareGrid, function (cell, idx) {
+	//console.log(cell);
+	var pin = turf.centroid(cell, {"marker-color": "#00F"});
+  //pins.push(pin);
+	console.log(pin);
+});		
+		
+
+		//return the grid to the gridLayer object
+        return L.geoJSON(squareGrid, {color: "#008800", weight: 1, fill:0}).addTo(map);
+		//map.fitBounds(gridLayer.getBounds());
+	} else {
+	//return an empty layer that can be filled with a grid when we are at the correct zoom
+		return L.geoJSON().addTo(map);
+	}
+}
+
+let gridLayer = drawGrid()
+
+function redrawLayer(){
+  map.removeLayer(gridLayer);
+  gridLayer = drawGrid();
+}
+
+map.on('mouseover', function (pin) {
+        style: {
+            fillColor: "red";
+        }
+    })
+
+</script>
+</html>
