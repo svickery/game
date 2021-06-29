@@ -32,7 +32,7 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
   map.on('move', redrawLayer);
 
 function drawGrid(){
-	if (map.getZoom() > 15){
+	if (map.getZoom() > 16){
 		// GRID
 		var bbox = map.getBounds().toBBoxString().split(',').map(Number);
 		var cellSide = 0.01;
@@ -47,9 +47,9 @@ var pins = [];
 turf.featureEach(squareGrid, function (cell, idx) {
 	//console.log(cell);
 	var pin = turf.centroid(cell, {"marker-color": "#00F"});
-  //pins.push(pin);
-	console.log(pin);
-});		
+    pins.push(pin);
+	//console.log(pin);
+});
 		
 
 		//return the grid to the gridLayer object
@@ -68,11 +68,42 @@ function redrawLayer(){
   gridLayer = drawGrid();
 }
 
-map.on('mouseover', function (pin) {
+/*featureEach.on('mouseover', function () {
         style: {
             fillColor: "red";
         }
-    })
+    })*/
+
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 0.5,
+        fillColor: 'red',
+        dashArray: '',
+        fillOpacity: 0.5
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+}
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight
+    });
+}
+
+geojson = L.geoJson(statesData, {
+    style: style,
+    onEachFeature: onEachFeature
+}).addTo(map);
 
 </script>
 </html>
