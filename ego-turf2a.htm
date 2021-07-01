@@ -69,6 +69,21 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+/*function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 4,
+        color: 'black',
+        fillOpacity: 0.4
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+    info.update(layer.feature.properties);
+}*/
+
     var geojson = {
         "type": "FeatureCollection",
         "features": [
@@ -263,47 +278,32 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                         ]
                     ]
                 }
-            },
-            {
-                "type": "Feature",
-                "properties": {},
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [
-                        [
-                            [
-                                -1.5879535675048826,
-                                51.99312561801158
-                            ],
-                            [
-                                -1.5801429748535156,
-                                51.99312561801158
-                            ],
-                            [
-                                -1.5801429748535156,
-                                51.997829088844
-                            ],
-                            [
-                                -1.5879535675048826,
-                                51.997829088844
-                            ],
-                            [
-                                -1.5879535675048826,
-                                51.99312561801158
-                            ]
-                        ]
-                    ]
-                }
             }
         ]
     }
+
+/*function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+    });
+}
+
+geojson = L.geoJson(statesData, {
+    style: style,
+    onEachFeature: onEachFeature
+}).addTo(map);*/
 
     L.geoJSON(geojson, {
         style: function(feature)    {
             return  {
                 color: 'grey',
                 weight: 2,
-                fillOpacity: 0.5 
+                fillOpacity: 0.1 
             }
         },
             /*onEachFeature: function(feature, layer) {
