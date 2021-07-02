@@ -26,9 +26,9 @@
 </body>
    <script>
 
-L.CursorHandler = L.Handler.extend({
+/*L.CursorHandler = L.Handler.extend({
 
-addHooks: function () {
+/*addHooks: function () {
     this._popup = new L.Popup();
     this._map.on('mouseover', this._open, this);
     this._map.on('mousemove', this._update, this);
@@ -58,7 +58,7 @@ _update: function (e) {
 
 });
 
-L.Map.addInitHook('addHandler', 'cursor', L.CursorHandler);
+L.Map.addInitHook('addHandler', 'cursor', L.CursorHandler);*/
 
 
 
@@ -68,21 +68,6 @@ var map = L.map("map", ({ scrollWheelZoom: false }), {
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
-
-/*function highlightFeature(e) {
-    var layer = e.target;
-
-    layer.setStyle({
-        weight: 4,
-        color: 'black',
-        fillOpacity: 0.4
-    });
-
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        layer.bringToFront();
-    }
-    info.update(layer.feature.properties);
-}*/
 
     var geojson = {
         "type": "FeatureCollection",
@@ -163,10 +148,10 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                             
                             ],
                             [
-                            -1.607271,
+                            -1.607351,
                                 52.002353
                             ],
-                            [-1.607271,
+                            [-1.607351,
                             52.001980
                             ],
                             [-1.607866,
@@ -190,23 +175,23 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                     "type": "Polygon",
                     "coordinates": [
                         [
-                            [-1.607271,
+                            [-1.607351,
                                 52.002353
                             
                             ],
                             [
-                            -1.606756,
+                            -1.606836,
                                 52.002353
                             ],
-                            [-1.606756,
+                            [-1.606836,
                             52.001980
                             ],
-                            [-1.607271,
+                            [-1.607351,
                             52.001980
                             
 
                             ],
-                            [-1.607271,
+                            [-1.607351,
                                 52.002353
                             
 
@@ -222,23 +207,23 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                     "type": "Polygon",
                     "coordinates": [
                         [
-                            [-1.606756,
+                            [-1.606836,
                                 52.002353
                             
                             ],
                             [
-                            -1.606241,
+                            -1.606321,
                                 52.002353
                             ],
-                            [-1.606241,
+                            [-1.606321,
                             52.001980
                             ],
-                            [-1.606756,
+                            [-1.606836,
                             52.001980
                             
 
                             ],
-                            [-1.606756,
+                            [-1.606836,
                                 52.002353
                             
 
@@ -254,23 +239,23 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                     "type": "Polygon",
                     "coordinates": [
                         [
-                            [-1.606241,
+                            [-1.606321,
                                 52.002353
                             
                             ],
                             [
-                            -1.605726,
+                            -1.605806,
                                 52.002353
                             ],
-                            [-1.605726,
+                            [-1.605806,
                             52.001980
                             ],
-                            [-1.606241,
+                            [-1.606321,
                             52.001980
                             
 
                             ],
-                            [-1.606241,
+                            [-1.606321,
                                 52.002353
                             
 
@@ -280,23 +265,7 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 }
             }
         ]
-    }
-
-/*function resetHighlight(e) {
-    geojson.resetStyle(e.target);
-}
-
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-    });
-}
-
-geojson = L.geoJson(statesData, {
-    style: style,
-    onEachFeature: onEachFeature
-}).addTo(map);*/
+    };
 
     L.geoJSON(geojson, {
         style: function(feature)    {
@@ -323,6 +292,37 @@ function onMapClick(e) {
 }
 
 map.on('click', onMapClick);
+
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 4,
+        color: 'red',
+        fillOpacity: 0.4
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+    info.update(layer.feature.properties);
+}
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight
+    });
+}
+
+geojson = L.geoJson(statesData, {
+    style: style,
+    onEachFeature: onEachFeature
+}).addTo(map);
 
 
 //drawGrid();
