@@ -10,6 +10,7 @@
     <script src="https://npmcdn.com/@turf/turf@6.3.0/turf.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
     crossorigin="anonymous"></script>
+    <script src="../src/L.TileLayer.Zoomify.js"></script>
    <style>
 #map {
   height: 500px;
@@ -29,6 +30,7 @@
 <div id="map"></div>
 </body>
    <script>
+
 
 L.CursorHandler = L.Handler.extend({
 
@@ -64,12 +66,42 @@ _update: function (e) {
 
 L.Map.addInitHook('addHandler', 'cursor', L.CursorHandler);
 
-
+/*var map = L.tileLayer.zoomify('img/senna/{g}/{z}-{x}-{y}.jpg',  {
+    width: 1920,
+    height: 1080,
+    cursor: true
+});*/
 
 var map = L.map("map", ({ scrollWheelZoom: false }), {
     cursor: true
 }).setView([51.995820925789836, -1.5818595886230467], 15);
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+
+
+//Wait until the map resources are ready.
+/*map.events.addLayer('ready', function () {
+
+//Create an image layer and add it to the map.
+map.addLayer(new atlas.layer.ImageLayer({
+    url: 'https://media.evo.co.uk/image/private/s--6NS0UECY--/v1587655846/evo/2020/04/McLaren%20P1%20GTR-18%20by%20Lanzante-15.jpg',
+    coordinates: [
+        [-1.608896, 52.002353], //Top Left Corner
+        [-1.554795, 52.002353], //Top Right Corner
+        [-1.554795, 51.989325], //Bottom Right Corner
+        [-1.608896, 51.989325]  //Bottom Left Corner
+    ]
+}));
+});
+
+/*map.layers.add(new atlas.layer.ImageLayer({
+    url: 'img/senna.jpg',
+    coordinates: [
+        [-1.608896, 52.002353], //Top Left Corner
+        [-1.554795, 52.002353], //Top Right Corner
+        [-1.554795, 51.989325], //Bottom Right Corner
+        [-1.608896, 51.989325]  //Bottom Left Corner
+    ]
+})).addTo(map);*/
     
     function highlightFeature(e) {
         var layer = e.target;
@@ -130,14 +162,13 @@ while (r <= 34){
         bolat -= latgap;
     }
 }
-console.log(features)
 
     var geojson = {
         "type": "FeatureCollection",
         "features": features
     };
 
-  
+
 
 function resetHighlight(e) {
     var layer = e.target;
@@ -148,6 +179,15 @@ function resetHighlight(e) {
         fillOpacity: 0.1
 })
 };
+
+var imageUrl = 'https://images.unsplash.com/photo-1608397717231-4a2883be7ad2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1330&q=80',
+    imageBounds = [[-1.608896, 52.002353], [-1.554795, 51.989325]];
+
+L.imageOverlay(imageUrl, imageBounds, {
+    opacity: 1,
+    interactive: true
+}).addTo(map);
+
 
 /*function popup(e)  {
     var layer = e.target;
@@ -163,14 +203,6 @@ function onEachFeature(feature, layer) {
         mouseout: resetHighlight
     });
 }
-
-
-
-/*geojson = L.geoJson(statesData, {
-    style: style,
-    onEachFeature: onEachFeature
-}).addTo(map);*/
-
 
     L.geoJSON(geojson, {
         style: function(feature)    {
@@ -201,87 +233,10 @@ map.on('click', onMapClick);
 
 
 
-//drawGrid();
-
-  //map.whenReady(drawGrid);
-  /*map.on('move', redrawLayer);*/
-
-/*function drawGrid(){
-	if (map.getZoom() > 15){
-		// GRID
-		var bbox = map.getBounds().toBBoxString().split(',').map(Number);
-		var cellSide = 0.01;
-		//var mask = polyLayer.toGeoJSON().features[0];
-		var options = {
-			units: 'kilometers',
-			//mask: mask
-		};
-
-		var squareGrid = turf.squareGrid(bbox, cellSide, options);
-var pins = [];
-turf.featureEach(squareGrid, function (cell, idx) {
-	//console.log(cell);
-	var pin = turf.centroid(cell, {"marker-color": "#00F"});
-    pins.push(pin);
-	//console.log(pin);
-});*/
-		
-
-		//return the grid to the gridLayer object
-        /*return L.geoJSON(squareGrid, {color: "#008800", weight: 1, fill:0}).addTo(map);
-		//map.fitBounds(gridLayer.getBounds());
-	} else {
-	//return an empty layer that can be filled with a grid when we are at the correct zoom
-		return L.geoJSON().addTo(map);
-	}
-}*/
-
-/*let gridLayer = drawGrid()
-
-function redrawLayer(){
-  map.removeLayer(gridLayer);
-  gridLayer = drawGrid();
-}*/
-
-/*featureEach.on('mouseover', function () {
-        style: {
-            fillColor: "red";
-        }
-    })*/
-
-/*function highlightFeature(e) {
-    var layer = e.target;
-
-    layer.setStyle({
-        weight: 0.5,
-        fillColor: 'red',
-        dashArray: '',
-        fillOpacity: 0.5
-    });
-
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        layer.bringToFront();
-    }
-}
-
-function resetHighlight(e) {
-    geojson.resetStyle(e.target);
-}
-
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight
-    });
-}
-
-geojson = L.geoJson(statesData, {
-    style: style,
-    onEachFeature: onEachFeature
-}).addTo(map);*/
-
 
 /*if(feature.geometry.type==='Polygon')   {
-                    layer.bindPopup(feature.geometry.coordinates.join(','));*/
+layer.bindPopup(feature.geometry.coordinates.join(','));*/
+
+
 </script>
 </html>
