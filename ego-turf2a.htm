@@ -102,6 +102,22 @@ map.addLayer(new atlas.layer.ImageLayer({
         [-1.608896, 51.989325]  //Bottom Left Corner
     ]
 })).addTo(map);*/
+
+var imageUrl = 'img/senna.jpg',
+    imageBounds = [[52.002353, -1.608896], [51.989325 ,-1.554795]];
+
+	var overLay=L.imageOverlay(imageUrl, imageBounds);
+	map.addLayer(overLay);
+    map.fitBounds(imageBounds);
+
+    /*var currentZoom = document.getElementById("currentZoom");
+
+function showZoom() {
+  currentZoom.innerHTML = map.getZoom();
+}
+showZoom();
+
+map.on("zoomend", showZoom);*/
     
     function highlightFeature(e) {
         var layer = e.target;
@@ -180,7 +196,7 @@ function resetHighlight(e) {
 })
 };
 
-var imageUrl = 'https://images.unsplash.com/photo-1608397717231-4a2883be7ad2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1330&q=80',
+/*var imageUrl = 'https://images.unsplash.com/photo-1608397717231-4a2883be7ad2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1330&q=80',
     imageBounds = [[-1.608896, 52.002353], [-1.554795, 51.989325]];
 
 L.imageOverlay(imageUrl, imageBounds, {
@@ -196,13 +212,6 @@ L.imageOverlay(imageUrl, imageBounds, {
 
     })
 }*/
-
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight
-    });
-}
 
     L.geoJSON(geojson, {
         style: function(feature)    {
