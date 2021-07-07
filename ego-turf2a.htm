@@ -10,7 +10,6 @@
     <script src="https://npmcdn.com/@turf/turf@6.3.0/turf.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
     crossorigin="anonymous"></script>
-    <script src="../src/L.TileLayer.Zoomify.js"></script>
    <style>
 #map {
   height: 500px;
@@ -32,76 +31,11 @@
    <script>
 
 
-L.CursorHandler = L.Handler.extend({
-
-addHooks: function () {
-    this._popup = new L.Popup();
-    this._map.on('mouseover', this._open, this);
-    this._map.on('mousemove', this._update, this);
-    this._map.on('mouseout', this._close, this);
-},
-
-removeHooks: function () {
-    this._map.off('mouseover', this._open, this);
-    this._map.off('mousemove', this._update, this);
-    this._map.off('mouseout', this._close, this);
-},
-
-_open: function (e) {
-    this._update(e);
-    this._popup.openOn(this._map);
-},
-
-_close: function () {
-    this._map.closePopup(this._popup);
-},
-
-_update: function (e) {
-    this._popup.setLatLng(e.latlng)
-        .setContent(e.latlng.toString());
-}
-
-
-});
-
-L.Map.addInitHook('addHandler', 'cursor', L.CursorHandler);
-
-/*var map = L.tileLayer.zoomify('img/senna/{g}/{z}-{x}-{y}.jpg',  {
-    width: 1920,
-    height: 1080,
-    cursor: true
-});*/
-
-var map = L.map("map", ({ scrollWheelZoom: false }), {
-    cursor: true
+var map = L.map("map", {
+    scrollWheelZoom: false,
+    minZoom: 15
 }).setView([51.995820925789836, -1.5818595886230467], 15);
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
-
-
-//Wait until the map resources are ready.
-/*map.events.addLayer('ready', function () {
-
-//Create an image layer and add it to the map.
-map.addLayer(new atlas.layer.ImageLayer({
-    url: 'https://media.evo.co.uk/image/private/s--6NS0UECY--/v1587655846/evo/2020/04/McLaren%20P1%20GTR-18%20by%20Lanzante-15.jpg',
-    coordinates: [
-        [-1.608896, 52.002353], //Top Left Corner
-        [-1.554795, 52.002353], //Top Right Corner
-        [-1.554795, 51.989325], //Bottom Right Corner
-        [-1.608896, 51.989325]  //Bottom Left Corner
-    ]
-}));
-});
-
-/*map.layers.add(new atlas.layer.ImageLayer({
-    url: 'img/senna.jpg',
-    coordinates: [
-        [-1.608896, 52.002353], //Top Left Corner
-        [-1.554795, 52.002353], //Top Right Corner
-        [-1.554795, 51.989325], //Bottom Right Corner
-        [-1.608896, 51.989325]  //Bottom Left Corner
-    ]
-})).addTo(map);*/
 
 var imageUrl = 'img/senna.jpg',
     imageBounds = [[52.002353, -1.608896], [51.989325 ,-1.554795]];
@@ -109,15 +43,7 @@ var imageUrl = 'img/senna.jpg',
 	var overLay=L.imageOverlay(imageUrl, imageBounds);
 	map.addLayer(overLay);
     map.fitBounds(imageBounds);
-
-    /*var currentZoom = document.getElementById("currentZoom");
-
-function showZoom() {
-  currentZoom.innerHTML = map.getZoom();
-}
-showZoom();
-
-map.on("zoomend", showZoom);*/
+    
     
     function highlightFeature(e) {
         var layer = e.target;
@@ -146,6 +72,7 @@ var bolat = 52.001980;
 var latgap = tolat - bolat;
 var lnggap = trlng - tllng;
 
+
 while (r <= 34){
     temp = 
         {
@@ -164,6 +91,7 @@ while (r <= 34){
                     ]
                 }
             }
+
     features.push(temp);
     tllng = trlng;
     trlng += lnggap;
@@ -196,23 +124,6 @@ function resetHighlight(e) {
 })
 };
 
-/*var imageUrl = 'https://images.unsplash.com/photo-1608397717231-4a2883be7ad2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1330&q=80',
-    imageBounds = [[-1.608896, 52.002353], [-1.554795, 51.989325]];
-
-L.imageOverlay(imageUrl, imageBounds, {
-    opacity: 1,
-    interactive: true
-}).addTo(map);
-
-
-/*function popup(e)  {
-    var layer = e.target;
-
-    layer.popup({
-
-    })
-}*/
-
     L.geoJSON(geojson, {
         style: function(feature)    {
             return  {
@@ -226,33 +137,15 @@ L.imageOverlay(imageUrl, imageBounds, {
                     mouseover: highlightFeature,
                     mouseout: resetHighlight,
         });
-        layer.on('mouseover', function(e) {
-  //open popup;
-  var popup = L.popup()
-   .setLatLng(e.latlng) 
-   .setContent('Popup')
-   .openOn(map);
-});
-        },
-    }).addTo(map);
-
-    var popup = L.popup();
-
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(map);
-}
-
-map.on('click', onMapClick);
-
-
-
-
-/*if(feature.geometry.type==='Polygon')   {
-layer.bindPopup(feature.geometry.coordinates.join(','));*/
-
-
+            layer.on('mouseover', function(e) {
+            //open popup;
+                var popup = L.popup()
+                .setLatLng(e.latlng) 
+                .setContent('Ticket Number = '+ e.target._leaflet_id)
+                .openOn(map);
+            });
+                },
+            }).addTo(map);
+    
 </script>
 </html>
