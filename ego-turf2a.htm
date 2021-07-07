@@ -226,6 +226,13 @@ L.imageOverlay(imageUrl, imageBounds, {
                     mouseover: highlightFeature,
                     mouseout: resetHighlight,
         });
+        layer.on('mouseover', function(e) {
+  //open popup;
+  var popup = L.popup()
+   .setLatLng(e.latlng) 
+   .setContent('Popup')
+   .openOn(map);
+});
         },
     }).addTo(map);
 
