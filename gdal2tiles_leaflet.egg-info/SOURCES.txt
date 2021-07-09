@@ -1,0 +1,7 @@
+README.md
+setup.py
+gdal2tiles_leaflet.egg-info/PKG-INFO
+gdal2tiles_leaflet.egg-info/SOURCES.txt
+gdal2tiles_leaflet.egg-info/dependency_links.txt
+gdal2tiles_leaflet.egg-info/requires.txt
+gdal2tiles_leaflet.egg-info/top_level.txt

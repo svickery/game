@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: gdal2tiles-leaflet
+Version: 3.3.1
+Summary: Generate raster image tiles for use with leaflet
+Home-page: https://github.com/commenthol/gdal2tiles-leaflet
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: MIT
+Description: UNKNOWN
+Platform: UNKNOWN
